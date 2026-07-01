@@ -122,9 +122,14 @@
     font-size:clamp(1.5rem,4.2vw,2.6rem);margin-top:10px;
     animation:fadeUp 1s .12s cubic-bezier(.2,.7,.2,1) both;
   }
+  .hero .product-name{
+    font-family:"Sora",sans-serif;font-weight:500;letter-spacing:.42em;text-transform:uppercase;
+    font-size:clamp(.7rem,1.6vw,.82rem);margin-top:16px;padding-left:.42em;
+    animation:fadeUp 1s .2s cubic-bezier(.2,.7,.2,1) both;
+  }
   .hero .sub{
-    max-width:560px;margin:20px auto 0;color:var(--muted);font-size:clamp(1rem,2vw,1.12rem);
-    animation:fadeUp 1s .24s cubic-bezier(.2,.7,.2,1) both;
+    max-width:560px;margin:22px auto 0;color:var(--muted);font-size:clamp(1rem,2vw,1.12rem);
+    animation:fadeUp 1s .3s cubic-bezier(.2,.7,.2,1) both;
   }
   .hero .cta{
     display:inline-flex;gap:14px;margin-top:36px;flex-wrap:wrap;justify-content:center;
@@ -267,7 +272,8 @@
       <div class="ring-glow"></div>
       <span class="eyebrow" style="display:block;margin-bottom:26px">Sound-Reactive LED Wall Art</span>
       <img class="logo" src="logo.jpeg" alt="AZORA" />
-      <h1 class="tagline"><span class="chrome-text">The </span><span class="spectrum-text">Cyber Wing</span></h1>
+      <h1 class="tagline spectrum-text">Shape Your Atmosphere</h1>
+      <p class="product-name chrome-text">Cyber Wing</p>
       <p class="sub">A 105&nbsp;cm sculpted light form that breathes with your music — 16&nbsp;million colors, 100+ living effects, controlled from anywhere over Wi-Fi.</p>
       <div class="cta">
         <a href="#setup" class="btn primary">Set Up Your Wing →</a>
@@ -427,7 +433,8 @@
       <div class="foot-inner">
         <div>
           <div class="foot-brand spectrum-text">AZORA</div>
-          <div style="color:var(--muted);font-size:.9rem;margin-top:6px">Electronics, sculpted in light &amp; 3D print.</div>
+          <div style="color:var(--txt);font-size:.95rem;margin-top:8px;letter-spacing:.02em">Shape Your Atmosphere.</div>
+          <div style="color:var(--muted);font-size:.88rem;margin-top:4px">Electronics, sculpted in light &amp; 3D print.</div>
         </div>
         <div class="foot-meta">
           Cyber Wing · Powered by WLED<br/>
@@ -437,12 +444,6 @@
     </div>
   </footer>
 
-  <script>
-    // scroll reveal
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
-    },{threshold:.14});
-    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
