@@ -101,14 +101,8 @@
     border-bottom:1px solid var(--line);
   }
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .brand{display:inline-flex;align-items:center;line-height:1;font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.14em;font-size:1.05rem}
-  .brand .o-ring{
-    display:block;width:.92em;height:.92em;border-radius:50%;margin:0 .15em 0 .01em;flex:none;
-    background:conic-gradient(from 0deg,#ff2d9b,#c15cff,#5b8cff,#33e0ff,#57ffb0,#ffe14d,#ff7a3d,#ff2d9b);
-    -webkit-mask:radial-gradient(circle,transparent 42%,#000 45%);
-            mask:radial-gradient(circle,transparent 42%,#000 45%);
-    filter:drop-shadow(0 0 5px rgba(255,90,180,.45));
-  }
+  .brand{display:inline-flex;align-items:center}
+  .brand img{height:30px;width:auto;display:block;mix-blend-mode:screen;filter:contrast(1.16) brightness(1.03)}
   nav.links{display:flex;gap:30px}
   nav.links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:400;transition:color .25s}
   nav.links a:hover{color:var(--txt)}
@@ -369,7 +363,7 @@
   <!-- NAV -->
   <header class="nav">
     <div class="wrap nav-inner">
-      <div class="brand">AZ<span class="o-ring" aria-hidden="true"></span>RA</div>
+      <a class="brand" href="#" aria-label="AZORA — home"><img src="logo.jpeg" alt="AZORA" /></a>
       <nav class="links">
         <a href="#product">Product</a>
         <a href="#specs">Specifications</a>
