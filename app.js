@@ -188,8 +188,24 @@
     });
   }
 
+  /* ============================================================ SCROLL BAR */
+  function initScrollbar() {
+    var ticking = false;
+    function update() {
+      var doc = document.documentElement;
+      var max = doc.scrollHeight - doc.clientHeight;
+      var p = max > 0 ? doc.scrollTop / max : 0;
+      root.style.setProperty("--scroll", p.toFixed(4));
+      ticking = false;
+    }
+    addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  }
+
   /* ============================================================ BOOT */
-  function boot() { initWing(); initReveal(); initSound(); }
+  function boot() { initWing(); initReveal(); initSound(); initScrollbar(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
 })();
