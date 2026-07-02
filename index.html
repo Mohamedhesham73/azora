@@ -96,8 +96,15 @@
     border-bottom:1px solid var(--line);
   }
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .brand{display:flex;align-items:center;gap:12px;font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.14em;font-size:1.02rem}
-  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--spectrum);background-size:300% 100%;animation:flow 6s linear infinite;box-shadow:0 0 14px rgba(255,90,180,.6)}
+  .brand{display:inline-flex;align-items:center;font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.14em;font-size:1.05rem}
+  .brand .o-ring{
+    display:inline-block;width:.78em;height:.78em;border-radius:50%;margin:0 .1em;vertical-align:middle;
+    background:conic-gradient(from 0deg,#ff2d9b,#c15cff,#5b8cff,#33e0ff,#57ffb0,#ffe14d,#ff7a3d,#ff2d9b);
+    -webkit-mask:radial-gradient(circle,transparent 40%,#000 43%);
+            mask:radial-gradient(circle,transparent 40%,#000 43%);
+  }
+  .brand .o-glow{position:relative}
+  .brand .o-glow::after{content:"";position:absolute;left:50%;top:50%;width:.78em;height:.78em;transform:translate(-50%,-50%);border-radius:50%;box-shadow:0 0 12px rgba(255,90,180,.5);pointer-events:none}
   nav.links{display:flex;gap:30px}
   nav.links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:400;transition:color .25s}
   nav.links a:hover{color:var(--txt)}
@@ -150,6 +157,30 @@
   .quickspecs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:44px;animation:fadeUp 1s .48s cubic-bezier(.2,.7,.2,1) both}
   .pill{border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:.82rem;color:var(--muted);background:rgba(255,255,255,.02)}
   .pill b{color:var(--txt);font-weight:500}
+
+  /* ---------- product / wing showcase ---------- */
+  .product{padding-top:clamp(52px,8vw,92px)}
+  .wing-stage{position:relative;max-width:1060px;margin:6px auto 0;padding:14px 0}
+  .wing-backlight{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;height:122%;border-radius:50%;z-index:0;
+    background:conic-gradient(from 0deg,#ff2d9b,#c15cff,#5b8cff,#33e0ff,#57ffb0,#ffe14d,#ff7a3d,#ff2d9b);
+    filter:blur(80px);opacity:.42;animation:spin 22s linear infinite;
+  }
+  .wing-hang{
+    position:relative;z-index:1;width:90%;margin:0 auto;
+    transform-origin:50% 0;animation:sway 7.5s ease-in-out infinite;
+    -webkit-mask:radial-gradient(125% 150% at 50% 48%,#000 82%,transparent 100%);
+            mask:radial-gradient(125% 150% at 50% 48%,#000 82%,transparent 100%);
+  }
+  .wing-hang img{display:block;width:100%;height:auto;filter:invert(1) contrast(1) brightness(2.3) saturate(1.15)}
+  .wing-color{
+    position:absolute;inset:0;z-index:2;pointer-events:none;
+    background:var(--spectrum);background-size:220% 100%;
+    mix-blend-mode:multiply;animation:flow 8s linear infinite;
+  }
+  @keyframes sway{0%,100%{transform:translateY(0) rotate(-.5deg)}50%{transform:translateY(-12px) rotate(.5deg)}}
+  .wing-caption{text-align:center;color:var(--muted);max-width:640px;margin:30px auto 0;font-size:clamp(1rem,2vw,1.12rem)}
 
   /* ---------- specifications ---------- */
   .spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
@@ -255,8 +286,9 @@
   <!-- NAV -->
   <header class="nav">
     <div class="wrap nav-inner">
-      <div class="brand"><span class="dot"></span> AZORA</div>
+      <div class="brand">AZ<span class="o-glow"><span class="o-ring" aria-hidden="true"></span></span>RA</div>
       <nav class="links">
+        <a href="#product">Product</a>
         <a href="#specs">Specifications</a>
         <a href="#box">In the Box</a>
         <a href="#setup">Setup</a>
@@ -286,6 +318,26 @@
         <span class="pill"><b>Sound</b> reactive</span>
         <span class="pill"><b>WLED</b> powered</span>
       </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="divider"></div></div>
+
+  <!-- PRODUCT / WING -->
+  <section id="product" class="product">
+    <div class="wrap">
+      <div class="section-head reveal" style="text-align:center">
+        <span class="eyebrow">The Product</span>
+        <h2 class="section-title chrome-text">A Wing That Comes Alive</h2>
+      </div>
+      <div class="wing-stage reveal">
+        <div class="wing-backlight"></div>
+        <div class="wing-hang">
+          <img src="wings.jpeg" alt="AZORA Cyber Wing — LED wall sculpture" />
+          <div class="wing-color"></div>
+        </div>
+      </div>
+      <p class="wing-caption reveal">105&nbsp;cm of sculpted wing, hung on your wall and lit by 16&nbsp;million colors — reacting to every beat in the room.</p>
     </div>
   </section>
 
