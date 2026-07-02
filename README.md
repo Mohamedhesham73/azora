@@ -12,6 +12,13 @@ Single static page, no build step.
 - `qr-code.jpeg` — QR to connect to the `WLED-AP` access point
 - `vercel.json` — HTTP security headers (see below)
 
+## Music (sound-reactive mode)
+Drop an audio file into this folder named **`music.mp3`** (or `music.m4a` / `music.ogg` /
+`music.wav`, or `song.mp3` / `azora.mp3`). Visitors get a "Enter with sound" prompt; while
+it plays, the wing and the whole site react to the audio in real time (beat pulses, and the
+palette/animation speed swing between calm and intense as the music's energy rises and falls).
+No file? The site works fine — it just stays silent and shows the sound toggle.
+
 ## Local preview
 Just open `index.html` in a browser.
 
