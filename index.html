@@ -96,15 +96,14 @@
     border-bottom:1px solid var(--line);
   }
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .brand{display:inline-flex;align-items:center;font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.14em;font-size:1.05rem}
+  .brand{display:inline-flex;align-items:center;line-height:1;font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.14em;font-size:1.05rem}
   .brand .o-ring{
-    display:inline-block;width:.78em;height:.78em;border-radius:50%;margin:0 .1em;vertical-align:middle;
+    display:block;width:.92em;height:.92em;border-radius:50%;margin:0 .04em 0 .1em;flex:none;
     background:conic-gradient(from 0deg,#ff2d9b,#c15cff,#5b8cff,#33e0ff,#57ffb0,#ffe14d,#ff7a3d,#ff2d9b);
-    -webkit-mask:radial-gradient(circle,transparent 40%,#000 43%);
-            mask:radial-gradient(circle,transparent 40%,#000 43%);
+    -webkit-mask:radial-gradient(circle,transparent 42%,#000 45%);
+            mask:radial-gradient(circle,transparent 42%,#000 45%);
+    filter:drop-shadow(0 0 5px rgba(255,90,180,.45));
   }
-  .brand .o-glow{position:relative}
-  .brand .o-glow::after{content:"";position:absolute;left:50%;top:50%;width:.78em;height:.78em;transform:translate(-50%,-50%);border-radius:50%;box-shadow:0 0 12px rgba(255,90,180,.5);pointer-events:none}
   nav.links{display:flex;gap:30px}
   nav.links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:400;transition:color .25s}
   nav.links a:hover{color:var(--txt)}
@@ -169,17 +168,23 @@
   }
   .wing-hang{
     position:relative;z-index:1;width:90%;margin:0 auto;
-    transform-origin:50% 0;animation:sway 7.5s ease-in-out infinite;
-    -webkit-mask:radial-gradient(125% 150% at 50% 48%,#000 82%,transparent 100%);
-            mask:radial-gradient(125% 150% at 50% 48%,#000 82%,transparent 100%);
+    opacity:0;transition:opacity .6s ease;
   }
-  .wing-hang img{display:block;width:100%;height:auto;filter:invert(1) contrast(1) brightness(2.3) saturate(1.15)}
-  .wing-color{
-    position:absolute;inset:0;z-index:2;pointer-events:none;
+  .wing-hang.ready{opacity:1}
+  /* rainbow fill, clipped to the wing silhouette (mask set from JS) */
+  .wing-rainbow{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
     background:var(--spectrum);background-size:220% 100%;
-    mix-blend-mode:multiply;animation:flow 8s linear infinite;
+    animation:flow 8s linear infinite;
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+    -webkit-mask-size:100% 100%;mask-size:100% 100%;
+    -webkit-mask-position:center;mask-position:center;
   }
-  @keyframes sway{0%,100%{transform:translateY(0) rotate(-.5deg)}50%{transform:translateY(-12px) rotate(.5deg)}}
+  /* processed wing (transparent bg) laid over the rainbow to bring back panel detail */
+  .wing-hang img{
+    position:relative;z-index:2;display:block;width:100%;height:auto;
+    mix-blend-mode:multiply;filter:brightness(1.12) saturate(1.05);
+  }
   .wing-caption{text-align:center;color:var(--muted);max-width:640px;margin:30px auto 0;font-size:clamp(1rem,2vw,1.12rem)}
 
   /* ---------- specifications ---------- */
@@ -286,7 +291,7 @@
   <!-- NAV -->
   <header class="nav">
     <div class="wrap nav-inner">
-      <div class="brand">AZ<span class="o-glow"><span class="o-ring" aria-hidden="true"></span></span>RA</div>
+      <div class="brand">AZ<span class="o-ring" aria-hidden="true"></span>RA</div>
       <nav class="links">
         <a href="#product">Product</a>
         <a href="#specs">Specifications</a>
@@ -333,8 +338,8 @@
       <div class="wing-stage reveal">
         <div class="wing-backlight"></div>
         <div class="wing-hang">
+          <div class="wing-rainbow"></div>
           <img src="wings.jpeg" alt="AZORA Cyber Wing — LED wall sculpture" />
-          <div class="wing-color"></div>
         </div>
       </div>
       <p class="wing-caption reveal">105&nbsp;cm of sculpted wing, hung on your wall and lit by 16&nbsp;million colors — reacting to every beat in the room.</p>
