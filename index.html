@@ -23,6 +23,11 @@
     --spectrum:linear-gradient(90deg,#ff2d9b,#c15cff,#5b8cff,#33e0ff,#57ffb0,#ffe14d,#ff7a3d,#ff2d9b);
     --radius:18px;
     --maxw:1140px;
+    /* sound-reactive drivers (updated from app.js) */
+    --flow-dur:8s;--spin-dur:22s;
+    --wing-bri:1.12;--wing-scale:1;
+    --site-hue:0deg;--site-sat:1;
+    --flash-op:0;--flash-hue:320;
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
@@ -72,7 +77,7 @@
   .spectrum-text{
     background:var(--spectrum);background-size:220% 100%;
     -webkit-background-clip:text;background-clip:text;color:transparent;
-    animation:flow 8s linear infinite;
+    animation:flow var(--flow-dur) linear infinite;
   }
   @keyframes flow{to{background-position:220% 0}}
   .chrome-text{
@@ -98,7 +103,7 @@
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
   .brand{display:inline-flex;align-items:center;line-height:1;font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.14em;font-size:1.05rem}
   .brand .o-ring{
-    display:block;width:.92em;height:.92em;border-radius:50%;margin:0 .04em 0 .1em;flex:none;
+    display:block;width:.92em;height:.92em;border-radius:50%;margin:0 .15em 0 .01em;flex:none;
     background:conic-gradient(from 0deg,#ff2d9b,#c15cff,#5b8cff,#33e0ff,#57ffb0,#ffe14d,#ff7a3d,#ff2d9b);
     -webkit-mask:radial-gradient(circle,transparent 42%,#000 45%);
             mask:radial-gradient(circle,transparent 42%,#000 45%);
@@ -115,7 +120,7 @@
     position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);
     width:min(620px,80vw);height:min(620px,80vw);border-radius:50%;z-index:-1;
     background:conic-gradient(from 0deg,#ff2d9b,#c15cff,#5b8cff,#33e0ff,#57ffb0,#ffe14d,#ff7a3d,#ff2d9b);
-    filter:blur(90px);opacity:.28;animation:spin 22s linear infinite;
+    filter:blur(90px);opacity:.28;animation:spin var(--spin-dur) linear infinite;
   }
   @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
   .hero .logo{
@@ -149,7 +154,7 @@
     transition:transform .25s,border-color .25s,background .25s;
   }
   .btn:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.4)}
-  .btn.primary{border:none;color:#08080a;font-weight:600;background:var(--spectrum);background-size:220% 100%;animation:flow 8s linear infinite}
+  .btn.primary{border:none;color:#08080a;font-weight:600;background:var(--spectrum);background-size:220% 100%;animation:flow var(--flow-dur) linear infinite}
   .btn.primary:hover{box-shadow:0 12px 34px rgba(255,90,180,.32)}
 
   /* pills row under hero */
@@ -164,18 +169,19 @@
     position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:100%;height:122%;border-radius:50%;z-index:0;
     background:conic-gradient(from 0deg,#ff2d9b,#c15cff,#5b8cff,#33e0ff,#57ffb0,#ffe14d,#ff7a3d,#ff2d9b);
-    filter:blur(80px);opacity:.42;animation:spin 22s linear infinite;
+    filter:blur(80px);opacity:.42;animation:spin var(--spin-dur) linear infinite;
   }
   .wing-hang{
     position:relative;z-index:1;width:90%;margin:0 auto;
     opacity:0;transition:opacity .6s ease;
+    transform:scale(var(--wing-scale));transform-origin:center;will-change:transform,filter;
   }
   .wing-hang.ready{opacity:1}
   /* rainbow fill, clipped to the wing silhouette (mask set from JS) */
   .wing-rainbow{
     position:absolute;inset:0;z-index:1;pointer-events:none;
     background:var(--spectrum);background-size:220% 100%;
-    animation:flow 8s linear infinite;
+    animation:flow var(--flow-dur) linear infinite;
     -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
     -webkit-mask-size:100% 100%;mask-size:100% 100%;
     -webkit-mask-position:center;mask-position:center;
@@ -183,7 +189,7 @@
   /* processed wing (transparent bg) laid over the rainbow to bring back panel detail */
   .wing-hang img{
     position:relative;z-index:2;display:block;width:100%;height:auto;
-    mix-blend-mode:multiply;filter:brightness(1.12) saturate(1.05);
+    mix-blend-mode:multiply;filter:brightness(var(--wing-bri)) saturate(1.05);
   }
   .wing-caption{text-align:center;color:var(--muted);max-width:640px;margin:30px auto 0;font-size:clamp(1rem,2vw,1.12rem)}
 
@@ -208,7 +214,7 @@
     content:counter(box,decimal-leading-zero);
     font-family:"Syne",sans-serif;font-weight:800;font-size:.92rem;min-width:42px;
     background:var(--spectrum);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
-    animation:flow 9s linear infinite;
+    animation:flow var(--flow-dur) linear infinite;
   }
   .box-aside{
     position:sticky;top:96px;border:1px solid var(--line);border-radius:var(--radius);padding:34px;
@@ -266,7 +272,7 @@
     background:linear-gradient(165deg,var(--panel),var(--bg-soft));transition:transform .35s,border-color .35s;
   }
   .adv:hover{transform:translateY(-6px);border-color:var(--line-2)}
-  .adv::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--spectrum);background-size:300% 100%;animation:flow 8s linear infinite;opacity:.85}
+  .adv::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--spectrum);background-size:300% 100%;animation:flow var(--flow-dur) linear infinite;opacity:.85}
   .adv .ic{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;border:1px solid var(--line-2);background:rgba(255,255,255,.03)}
   .adv .ic svg{width:22px;height:22px}
   .adv h3{font-family:"Syne",sans-serif;font-weight:700;font-size:1.18rem;margin-bottom:8px;letter-spacing:-.01em}
@@ -277,11 +283,59 @@
   .foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:22px}
   .foot-brand{font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.16em;font-size:1.3rem}
   .foot-meta{color:var(--muted-2);font-size:.86rem;text-align:right}
-  .foot-line{height:2px;width:100%;margin-bottom:40px;background:var(--spectrum);background-size:300% 100%;animation:flow 9s linear infinite;border-radius:2px;opacity:.9}
+  .foot-line{height:2px;width:100%;margin-bottom:40px;background:var(--spectrum);background-size:300% 100%;animation:flow var(--flow-dur) linear infinite;border-radius:2px;opacity:.9}
 
   /* reveal on scroll */
   .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
   .reveal.in{opacity:1;transform:none}
+
+  /* ---------- sound-reactive ---------- */
+  #reactive{filter:hue-rotate(var(--site-hue)) saturate(var(--site-sat));transition:filter .55s ease}
+  #beat-flash{
+    position:fixed;inset:0;z-index:35;pointer-events:none;opacity:var(--flash-op);
+    background:radial-gradient(58% 52% at 50% 42%, hsl(var(--flash-hue) 95% 60% / .85), transparent 72%);
+    mix-blend-mode:screen;transition:opacity .09s linear;
+  }
+  /* entry prompt */
+  #enter{
+    position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:20px;text-align:center;padding:26px;
+    background:radial-gradient(circle at 50% 38%, #0d0d14 0%, #050506 66%);
+    transition:opacity .6s ease,visibility .6s ease;
+  }
+  #enter.hide{opacity:0;visibility:hidden}
+  #enter .enter-logo{width:min(320px,70vw);margin-bottom:6px;filter:drop-shadow(0 14px 40px rgba(0,0,0,.6))}
+  #enter h2{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(1.3rem,3.4vw,2rem);letter-spacing:-.01em}
+  #enter p{color:var(--muted);max-width:420px;font-size:.98rem;margin-top:-6px}
+  #enter .enter-btn{
+    display:inline-flex;align-items:center;gap:12px;margin-top:8px;padding:15px 32px;border-radius:999px;border:none;cursor:pointer;
+    font-family:"Sora",sans-serif;font-weight:600;font-size:1rem;color:#08080a;
+    background:var(--spectrum);background-size:220% 100%;animation:flow var(--flow-dur) linear infinite;
+    box-shadow:0 12px 40px rgba(255,90,180,.3);transition:transform .25s;
+  }
+  #enter .enter-btn:hover{transform:translateY(-2px)}
+  #enter .skip{background:none;border:none;color:var(--muted-2);font-size:.85rem;cursor:pointer;text-decoration:underline;letter-spacing:.02em}
+  #enter .skip:hover{color:var(--muted)}
+  /* sound toggle */
+  #sound-toggle{
+    position:fixed;right:20px;bottom:20px;z-index:120;width:52px;height:52px;border-radius:50%;
+    display:none;align-items:center;justify-content:center;cursor:pointer;color:#fff;
+    border:1px solid var(--line-2);background:rgba(10,10,14,.55);backdrop-filter:blur(10px);
+    transition:transform .25s,border-color .25s;
+  }
+  body.audio-ready #sound-toggle{display:flex}
+  #sound-toggle:hover{transform:scale(1.07);border-color:rgba(255,255,255,.4)}
+  #sound-toggle .bars{display:flex;align-items:flex-end;gap:3px;height:20px}
+  #sound-toggle .bars i{width:3px;background:var(--spectrum);background-size:100% 300%;border-radius:2px;height:40%}
+  body.audio-on #sound-toggle .bars i{animation:eq .8s ease-in-out infinite}
+  body.audio-on #sound-toggle .bars i:nth-child(2){animation-delay:.15s}
+  body.audio-on #sound-toggle .bars i:nth-child(3){animation-delay:.3s}
+  body.audio-on #sound-toggle .bars i:nth-child(4){animation-delay:.45s}
+  @keyframes eq{0%,100%{height:30%}50%{height:100%}}
+  @media(prefers-reduced-motion:reduce){
+    #beat-flash{display:none}
+    .wing-hang{transform:none!important}
+  }
 </style>
 </head>
 <body>
@@ -302,6 +356,9 @@
       <a href="#setup" class="btn" style="padding:9px 18px;font-size:.85rem">Get Started</a>
     </div>
   </header>
+
+  <!-- everything below reacts to the music (hue shifts on tempo change) -->
+  <div id="reactive">
 
   <!-- HERO -->
   <section class="hero">
@@ -500,6 +557,25 @@
       </div>
     </div>
   </footer>
+
+  </div><!-- /#reactive -->
+
+  <!-- beat flash overlay -->
+  <div id="beat-flash" aria-hidden="true"></div>
+
+  <!-- sound on/off toggle -->
+  <button id="sound-toggle" aria-label="Toggle sound" title="Sound on/off">
+    <span class="bars"><i></i><i></i><i></i><i></i></span>
+  </button>
+
+  <!-- entry prompt -->
+  <div id="enter">
+    <img class="enter-logo" src="logo.jpeg" alt="AZORA" />
+    <h2 class="spectrum-text">Shape Your Atmosphere</h2>
+    <p>Experience AZORA the way it's meant to be — with sound that paints the light.</p>
+    <button class="enter-btn" id="enter-sound">▶  Enter with sound</button>
+    <button class="skip" id="enter-silent">Continue without sound</button>
+  </div>
 
   <script src="app.js"></script>
 </body>
