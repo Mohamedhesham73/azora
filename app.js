@@ -69,8 +69,10 @@
 
   /* ============================================================ SOUND (file) */
   var AudioCtx = window.AudioContext || window.webkitAudioContext;
-  var actx = null, srcNode = null, analyser = null, freq = null, audioEl = null;
-  var wired = false, playing = false, rafId = null;
+  var actx = null, srcNode = null, micSource = null, micStream = null;
+  var analyser = null, freq = null, audioEl = null;
+  var silentGain = null, musicGain = null;
+  var playing = false, rafId = null, mode = "music";
 
   var siteHue = 0, flashHue = 320;
   var pulse = 0, bassSmooth = 0, intensity = 0;
@@ -125,67 +127,122 @@
     root.style.setProperty("--site-sat", "1");
   }
 
-  function wire() {
-    if (wired) return true;
-    if (!AudioCtx || !audioEl) return false;
+  // audio graph: analyser is kept "alive" through a silent gain so it always gets data,
+  // while music is played audibly through its own gain. Mic connects to analyser ONLY
+  // (never to the speakers) -> reacts to the room with zero feedback.
+  function ensureCtx() {
+    if (actx) return;
     actx = new AudioCtx();
-    srcNode = actx.createMediaElementSource(audioEl);
     analyser = actx.createAnalyser();
     analyser.fftSize = 1024; analyser.smoothingTimeConstant = 0.8;
     freq = new Uint8Array(analyser.frequencyBinCount);
-    srcNode.connect(analyser); analyser.connect(actx.destination);
-    wired = true;
-    return true;
+    silentGain = actx.createGain(); silentGain.gain.value = 0;
+    analyser.connect(silentGain); silentGain.connect(actx.destination);
+    musicGain = actx.createGain(); musicGain.gain.value = 0.85; musicGain.connect(actx.destination);
   }
-
-  function startAudio() {
-    if (!wire()) { body.classList.add("audio-ready"); return; }
-    if (actx.state === "suspended") actx.resume();
-    var p = audioEl.play();
-    if (p && p.then) {
-      p.then(function () {
-        playing = true;
-        body.classList.add("audio-on", "audio-ready");
-        section = "low"; lastSwitch = performance.now();
-        if (!rafId) frame();
-      }).catch(function () {
-        // no file yet or playback blocked — still reveal the toggle
-        body.classList.add("audio-ready");
-      });
-    } else {
-      playing = true; body.classList.add("audio-on", "audio-ready"); if (!rafId) frame();
+  function ensureMusicNode() {
+    ensureCtx();
+    if (!srcNode && audioEl) {
+      srcNode = actx.createMediaElementSource(audioEl);
+      srcNode.connect(analyser);
+      srcNode.connect(musicGain);
     }
   }
 
-  function stopAudio() {
+  function beginLoop() {
+    playing = true;
+    body.classList.add("audio-on", "audio-ready");
+    section = "low"; lastSwitch = performance.now();
+    if (!rafId) frame();
+    updateUI();
+  }
+
+  function startMusic() {
+    if (!AudioCtx) { body.classList.add("audio-ready"); updateUI(); return; }
+    ensureMusicNode();
+    stopMic();
+    if (actx.state === "suspended") actx.resume();
+    mode = "music";
+    var p = audioEl && audioEl.play();
+    if (p && p.then) {
+      p.then(beginLoop).catch(function () { body.classList.add("audio-ready"); updateUI(); });
+    } else { beginLoop(); }
+  }
+
+  function startMic() {
+    if (!AudioCtx || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { startMusic(); return; }
+    ensureCtx();
+    if (actx.state === "suspended") actx.resume();
     if (audioEl) audioEl.pause();
+    navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } })
+      .then(function (stream) {
+        micStream = stream;
+        micSource = actx.createMediaStreamSource(stream);
+        micSource.connect(analyser);
+        mode = "mic";
+        beginLoop();
+      })
+      .catch(function () {
+        // denied / no mic -> gracefully fall back to the music track
+        startMusic();
+      });
+  }
+
+  function stopMic() {
+    if (micSource) { try { micSource.disconnect(); } catch (e) {} micSource = null; }
+    if (micStream) { micStream.getTracks().forEach(function (t) { t.stop(); }); micStream = null; }
+  }
+
+  function stopAll() {
+    if (audioEl) audioEl.pause();
+    stopMic();
     playing = false;
     body.classList.remove("audio-on");
     resetVars();
+    updateUI();
+  }
+
+  function updateUI() {
+    var ms = document.getElementById("mode-switch");
+    if (ms) {
+      var btns = ms.querySelectorAll("button[data-mode]"), i;
+      for (i = 0; i < btns.length; i++) {
+        btns[i].classList.toggle("active", playing && btns[i].getAttribute("data-mode") === mode);
+      }
+    }
   }
 
   function initSound() {
     audioEl = document.getElementById("track");
     var overlay = document.getElementById("enter");
-    var enterBtn = document.getElementById("enter-sound");
+    var enterMusic = document.getElementById("enter-music");
+    var enterMic = document.getElementById("enter-mic");
     var silentBtn = document.getElementById("enter-silent");
+    var modeSwitch = document.getElementById("mode-switch");
     var toggle = document.getElementById("sound-toggle");
-
     function hideOverlay() { if (overlay) overlay.classList.add("hide"); }
-    if (!AudioCtx && enterBtn) enterBtn.textContent = "Enter";
 
-    if (enterBtn) enterBtn.addEventListener("click", function () {
-      hideOverlay();
-      if (AudioCtx) startAudio(); else body.classList.add("audio-ready");
+    var noMic = !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia;
+    if (!AudioCtx) { if (enterMusic) enterMusic.textContent = "Enter"; }
+    if ((!AudioCtx || noMic) && enterMic) enterMic.style.display = "none";
+
+    if (enterMusic) enterMusic.addEventListener("click", function () {
+      hideOverlay(); if (AudioCtx) startMusic(); else body.classList.add("audio-ready");
     });
+    if (enterMic) enterMic.addEventListener("click", function () { hideOverlay(); startMic(); });
     if (silentBtn) silentBtn.addEventListener("click", function () {
-      hideOverlay();
-      body.classList.add("audio-ready");
+      hideOverlay(); body.classList.add("audio-ready"); updateUI();
+    });
+    if (modeSwitch) modeSwitch.addEventListener("click", function (e) {
+      var b = e.target.closest ? e.target.closest("button[data-mode]") : null;
+      if (!b) return;
+      if (b.getAttribute("data-mode") === "mic") startMic(); else startMusic();
     });
     if (toggle) toggle.addEventListener("click", function () {
       if (!AudioCtx) return;
-      if (playing) stopAudio(); else startAudio();
+      if (playing) stopAll(); else (mode === "mic" ? startMic() : startMusic());
     });
+    updateUI();
   }
 
   /* ============================================================ SCROLL BAR */

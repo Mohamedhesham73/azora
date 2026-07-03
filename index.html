@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AZORA — Cyber Wing</title>
 <meta name="description" content="AZORA Cyber Wing — sound-reactive, Wi-Fi controlled RGB LED wall art. 16 million colors, 100+ effects, WLED powered." />
+
+<!-- favicon + theme -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="logo.jpeg" />
+<meta name="theme-color" content="#050506" />
+
+<!-- social / link previews -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="AZORA" />
+<meta property="og:title" content="AZORA — Shape Your Atmosphere" />
+<meta property="og:description" content="Sound-reactive LED light objects. 16 million colors, 100+ effects, Wi-Fi control. Meet the Cyber Wing." />
+<meta property="og:image" content="https://azora-light.vercel.app/logo.jpeg" />
+<meta property="og:url" content="https://azora-light.vercel.app/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AZORA — Shape Your Atmosphere" />
+<meta name="twitter:description" content="Sound-reactive LED light objects. 16M colors, 100+ effects, Wi-Fi control." />
+<meta name="twitter:image" content="https://azora-light.vercel.app/logo.jpeg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -103,7 +120,7 @@
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
   .brand{display:inline-flex;align-items:center}
   .brand img{height:44px;width:auto;display:block;mix-blend-mode:screen;filter:contrast(1.16) brightness(1.03)}
-  nav.links{display:flex;gap:30px}
+  nav.links{display:flex;gap:22px}
   nav.links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:400;transition:color .25s}
   nav.links a:hover{color:var(--txt)}
   @media(max-width:760px){nav.links{display:none}}
@@ -272,6 +289,28 @@
   .adv h3{font-family:"Syne",sans-serif;font-weight:700;font-size:1.18rem;margin-bottom:8px;letter-spacing:-.01em}
   .adv p{color:var(--muted);font-size:.96rem}
 
+  /* ---------- collection ---------- */
+  .collection-intro{color:var(--muted);max-width:660px;margin:-24px 0 44px;font-size:clamp(1rem,2vw,1.1rem)}
+  .collection-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+  .prod-card{
+    display:flex;flex-direction:column;text-decoration:none;overflow:hidden;
+    border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(165deg,var(--panel),var(--bg-soft));
+    transition:transform .35s,border-color .35s;
+  }
+  .prod-card.active:hover{transform:translateY(-6px);border-color:var(--line-2)}
+  .prod-thumb{position:relative;aspect-ratio:16/10;overflow:hidden;background:#070709;display:flex;align-items:center;justify-content:center}
+  .prod-thumb img{width:86%;height:auto;filter:invert(1) brightness(1.9) contrast(1.05)}
+  .prod-thumb::after{content:"";position:absolute;inset:0;background:var(--spectrum);background-size:220% 100%;mix-blend-mode:multiply;animation:flow var(--flow-dur) linear infinite;pointer-events:none}
+  .prod-thumb.ghost{color:var(--muted-2)}
+  .prod-thumb.ghost::after{display:none}
+  .prod-thumb.ghost span{font-size:2.4rem;opacity:.5}
+  .prod-info{padding:20px 22px 24px}
+  .prod-status{display:inline-block;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px}
+  .prod-card.active .prod-status{background:var(--spectrum);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow var(--flow-dur) linear infinite}
+  .prod-info h3{font-family:"Syne",sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:-.01em;margin-bottom:6px}
+  .prod-info p{color:var(--muted);font-size:.94rem}
+  .prod-card.soon{opacity:.72}
+
   /* ---------- footer ---------- */
   footer{padding:70px 0 46px;border-top:1px solid var(--line);position:relative;z-index:2}
   .foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:22px}
@@ -329,16 +368,28 @@
     box-shadow:0 12px 40px rgba(255,90,180,.3);transition:transform .25s;
   }
   #enter .enter-btn:hover{transform:translateY(-2px)}
-  #enter .skip{background:none;border:none;color:var(--muted-2);font-size:.85rem;cursor:pointer;text-decoration:underline;letter-spacing:.02em}
+  #enter .enter-mic{
+    display:inline-flex;align-items:center;gap:10px;padding:12px 26px;border-radius:999px;cursor:pointer;
+    font-family:"Sora",sans-serif;font-weight:500;font-size:.92rem;color:var(--txt);
+    border:1px solid var(--line-2);background:rgba(255,255,255,.03);transition:transform .25s,border-color .25s;
+  }
+  #enter .enter-mic:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.4)}
+  #enter .skip{background:none;border:none;color:var(--muted-2);font-size:.85rem;cursor:pointer;text-decoration:underline;letter-spacing:.02em;margin-top:2px}
   #enter .skip:hover{color:var(--muted)}
-  /* sound toggle */
+  /* sound controls cluster */
+  #sound-controls{position:fixed;right:20px;bottom:20px;z-index:120;display:none;align-items:center;gap:10px}
+  body.audio-ready #sound-controls{display:flex}
+  #mode-switch{display:flex;border:1px solid var(--line-2);border-radius:999px;overflow:hidden;background:rgba(10,10,14,.6);backdrop-filter:blur(10px)}
+  #mode-switch button{border:none;background:none;color:var(--muted);font-family:"Sora",sans-serif;font-size:.82rem;font-weight:500;padding:9px 13px;cursor:pointer;line-height:1;white-space:nowrap;transition:color .2s,background .2s}
+  #mode-switch button+button{border-left:1px solid var(--line)}
+  #mode-switch button:hover{color:var(--txt)}
+  #mode-switch button.active{color:#fff;background:rgba(255,255,255,.1)}
   #sound-toggle{
-    position:fixed;right:20px;bottom:20px;z-index:120;width:52px;height:52px;border-radius:50%;
-    display:none;align-items:center;justify-content:center;cursor:pointer;color:#fff;
-    border:1px solid var(--line-2);background:rgba(10,10,14,.55);backdrop-filter:blur(10px);
+    width:52px;height:52px;border-radius:50%;flex:none;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;
+    border:1px solid var(--line-2);background:rgba(10,10,14,.6);backdrop-filter:blur(10px);
     transition:transform .25s,border-color .25s;
   }
-  body.audio-ready #sound-toggle{display:flex}
   #sound-toggle:hover{transform:scale(1.07);border-color:rgba(255,255,255,.4)}
   #sound-toggle .bars{display:flex;align-items:flex-end;gap:3px;height:20px}
   #sound-toggle .bars i{width:3px;background:var(--spectrum);background-size:100% 300%;border-radius:2px;height:40%}
@@ -364,6 +415,7 @@
       <a class="brand" href="#" aria-label="AZORA — home"><img src="logo.jpeg" alt="AZORA" /></a>
       <nav class="links">
         <a href="#product">Product</a>
+        <a href="#collection">Collection</a>
         <a href="#specs">Specifications</a>
         <a href="#box">In the Box</a>
         <a href="#setup">Setup</a>
@@ -556,6 +608,45 @@
     </div>
   </section>
 
+  <div class="wrap"><div class="divider"></div></div>
+
+  <!-- COLLECTION -->
+  <section id="collection">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">The Brand</span>
+        <h2 class="section-title chrome-text">The AZORA Collection</h2>
+      </div>
+      <p class="reveal collection-intro">AZORA is a growing family of light objects, each designed to shape the atmosphere of your space. The Cyber Wing is where it begins — more drops are on the way.</p>
+      <div class="collection-grid reveal">
+        <a class="prod-card active" href="#product">
+          <div class="prod-thumb"><img src="wings.jpeg" alt="AZORA Cyber Wing" /></div>
+          <div class="prod-info">
+            <span class="prod-status">Available now</span>
+            <h3>Cyber Wing</h3>
+            <p>Sound-reactive LED wall sculpture — 105&nbsp;cm, 16M colors, 100+ effects.</p>
+          </div>
+        </a>
+        <div class="prod-card soon">
+          <div class="prod-thumb ghost"><span>◇</span></div>
+          <div class="prod-info">
+            <span class="prod-status">Coming soon</span>
+            <h3>Next drop</h3>
+            <p>A new light object for your atmosphere.</p>
+          </div>
+        </div>
+        <div class="prod-card soon">
+          <div class="prod-thumb ghost"><span>◇</span></div>
+          <div class="prod-info">
+            <span class="prod-status">In the works</span>
+            <h3>More to come</h3>
+            <p>The collection keeps growing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <div class="wrap">
@@ -584,17 +675,24 @@
   <!-- beat flash overlay -->
   <div id="beat-flash" aria-hidden="true"></div>
 
-  <!-- sound on/off toggle -->
-  <button id="sound-toggle" aria-label="Toggle sound" title="Sound on/off">
-    <span class="bars"><i></i><i></i><i></i><i></i></span>
-  </button>
+  <!-- sound controls: source switch (music / live mic) + play-stop -->
+  <div id="sound-controls">
+    <div id="mode-switch" role="group" aria-label="Sound source">
+      <button type="button" data-mode="music" title="Play the AZORA track">♫ Music</button>
+      <button type="button" data-mode="mic" title="React to your room (uses your mic)">🎤 Live</button>
+    </div>
+    <button id="sound-toggle" aria-label="Sound on/off" title="Sound on/off">
+      <span class="bars"><i></i><i></i><i></i><i></i></span>
+    </button>
+  </div>
 
   <!-- entry prompt -->
   <div id="enter">
     <img class="enter-logo" src="logo.jpeg" alt="AZORA" />
     <h2 class="spectrum-text">Shape Your Atmosphere</h2>
     <p>Experience AZORA the way it's meant to be — with sound that paints the light.</p>
-    <button class="enter-btn" id="enter-sound">▶  Enter with sound</button>
+    <button class="enter-btn" id="enter-music">▶  Enter with music</button>
+    <button class="enter-mic" id="enter-mic">🎤  React to my room</button>
     <button class="skip" id="enter-silent">Continue without sound</button>
   </div>
 
