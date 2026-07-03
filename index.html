@@ -24,7 +24,7 @@
     --radius:18px;
     --maxw:1140px;
     /* sound-reactive drivers (updated from app.js) */
-    --flow-dur:8s;--spin-dur:22s;
+    --flow-dur:14s;--spin-dur:30s;
     --wing-bri:1.12;--wing-scale:1;
     --site-hue:0deg;--site-sat:1;
     --flash-op:0;--flash-hue:320;
@@ -102,7 +102,7 @@
   }
   .nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px}
   .brand{display:inline-flex;align-items:center}
-  .brand img{height:30px;width:auto;display:block;mix-blend-mode:screen;filter:contrast(1.16) brightness(1.03)}
+  .brand img{height:44px;width:auto;display:block;mix-blend-mode:screen;filter:contrast(1.16) brightness(1.03)}
   nav.links{display:flex;gap:30px}
   nav.links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:400;transition:color .25s}
   nav.links a:hover{color:var(--txt)}
@@ -275,9 +275,7 @@
   /* ---------- footer ---------- */
   footer{padding:70px 0 46px;border-top:1px solid var(--line);position:relative;z-index:2}
   .foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:22px}
-  .foot-brand{font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.16em;font-size:1.3rem}
-  .foot-meta{color:var(--muted-2);font-size:.86rem;text-align:right}
-  .foot-line{height:2px;width:100%;margin-bottom:40px;background:var(--spectrum);background-size:300% 100%;animation:flow var(--flow-dur) linear infinite;border-radius:2px;opacity:.9}
+  .foot-logo{height:46px;width:auto;display:block;mix-blend-mode:screen;filter:contrast(1.16) brightness(1.03)}
 
   /* reveal on scroll */
   .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
@@ -561,16 +559,11 @@
   <!-- FOOTER -->
   <footer>
     <div class="wrap">
-      <div class="foot-line"></div>
       <div class="foot-inner">
         <div>
-          <div class="foot-brand spectrum-text">AZORA</div>
-          <div style="color:var(--txt);font-size:.95rem;margin-top:8px;letter-spacing:.02em">Shape Your Atmosphere.</div>
+          <img class="foot-logo" src="logo.jpeg" alt="AZORA" />
+          <div style="color:var(--txt);font-size:.95rem;margin-top:12px;letter-spacing:.02em">Shape Your Atmosphere.</div>
           <div style="color:var(--muted);font-size:.88rem;margin-top:4px">Electronics, sculpted in light &amp; 3D print.</div>
-        </div>
-        <div class="foot-meta">
-          Cyber Wing · Powered by WLED<br/>
-          Warranty document included in box
         </div>
       </div>
     </div>

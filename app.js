@@ -83,8 +83,8 @@
     flashHue = (flashHue + 65) % 360;
     root.style.setProperty("--site-hue", siteHue + "deg");
     root.style.setProperty("--site-sat", fast ? "1.28" : "1.02");
-    root.style.setProperty("--flow-dur", (fast ? 2.4 : 6.5) + "s");
-    root.style.setProperty("--spin-dur", (fast ? 7 : 20) + "s");
+    root.style.setProperty("--flow-dur", (fast ? 4.5 : 11) + "s");
+    root.style.setProperty("--spin-dur", (fast ? 12 : 26) + "s");
   }
 
   function frame() {
@@ -120,8 +120,8 @@
     root.style.setProperty("--wing-scale", "1");
     root.style.setProperty("--wing-bri", "1.12");
     root.style.setProperty("--flash-op", "0");
-    root.style.setProperty("--flow-dur", "8s");
-    root.style.setProperty("--spin-dur", "22s");
+    root.style.setProperty("--flow-dur", "14s");
+    root.style.setProperty("--spin-dur", "30s");
     root.style.setProperty("--site-sat", "1");
   }
 
