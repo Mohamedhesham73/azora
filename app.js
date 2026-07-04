@@ -11,12 +11,14 @@
 
   /* ============================================================ WING CUTOUT */
   function cutoutWing(img) {
-    var w = img.naturalWidth, h = img.naturalHeight;
-    if (!w || !h) return null;
+    var nw = img.naturalWidth, nh = img.naturalHeight;
+    if (!nw || !nh) return null;
+    var scale = Math.min(1, 1100 / nw);          // cap resolution to save memory
+    var w = Math.round(nw * scale), h = Math.round(nh * scale);
     var canvas = document.createElement("canvas");
     canvas.width = w; canvas.height = h;
     var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0, w, h);
     var imgData;
     try { imgData = ctx.getImageData(0, 0, w, h); } catch (e) { return null; }
     var d = imgData.data, N = w * h, TH = 236;
@@ -220,7 +222,17 @@
     var silentBtn = document.getElementById("enter-silent");
     var modeSwitch = document.getElementById("mode-switch");
     var toggle = document.getElementById("sound-toggle");
-    function hideOverlay() { if (overlay) overlay.classList.add("hide"); }
+
+    function blockTouch(e) { e.preventDefault(); }
+    function hideOverlay() {
+      if (overlay) { overlay.classList.add("hide"); overlay.removeEventListener("touchmove", blockTouch); }
+      document.documentElement.classList.remove("overlay-open");
+    }
+    // lock the page behind the entry overlay so scrolling/zoom doesn't leak through
+    if (overlay && !overlay.classList.contains("hide")) {
+      document.documentElement.classList.add("overlay-open");
+      overlay.addEventListener("touchmove", blockTouch, { passive: false });
+    }
 
     var noMic = !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia;
     if (!AudioCtx) { if (enterMusic) enterMusic.textContent = "Enter"; }

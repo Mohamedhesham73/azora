@@ -57,7 +57,11 @@
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
+    overscroll-behavior-y:none;            /* no Android pull-to-refresh */
+    -webkit-tap-highlight-color:transparent;
   }
+  /* lock the page while the entry overlay is open */
+  html.overlay-open,html.overlay-open body{overflow:hidden;height:100%;touch-action:none}
 
   /* ---------- living rainbow atmosphere ---------- */
   .aurora{
@@ -344,7 +348,8 @@
   .spec:hover::after{transform:scaleX(1)}
 
   /* ---------- sound-reactive ---------- */
-  #reactive{filter:hue-rotate(var(--site-hue)) saturate(var(--site-sat));transition:filter .55s ease}
+  #reactive{transition:filter .55s ease}
+  body.audio-on #reactive{filter:hue-rotate(var(--site-hue)) saturate(var(--site-sat))}
   #beat-flash{
     position:fixed;inset:0;z-index:35;pointer-events:none;opacity:var(--flash-op);
     background:radial-gradient(58% 52% at 50% 42%, hsl(var(--flash-hue) 95% 60% / .85), transparent 72%);
@@ -356,6 +361,7 @@
     gap:20px;text-align:center;padding:26px;
     background:radial-gradient(circle at 50% 38%, #0d0d14 0%, #050506 66%);
     transition:opacity .6s ease,visibility .6s ease;
+    touch-action:none;overscroll-behavior:contain;
   }
   #enter.hide{opacity:0;visibility:hidden}
   #enter .enter-logo{width:min(320px,70vw);margin-bottom:6px;filter:drop-shadow(0 14px 40px rgba(0,0,0,.6))}
@@ -401,6 +407,22 @@
   @media(prefers-reduced-motion:reduce){
     #beat-flash{display:none}
     .wing-hang{transform:none!important}
+  }
+
+  /* ---------- mobile: cut GPU/memory so browsers don't reload on zoom ---------- */
+  @media(max-width:768px){
+    .grain{display:none}
+    .aurora{filter:blur(10px) saturate(115%);opacity:.65}
+    .ring-glow{filter:blur(46px);width:min(360px,78vw);height:min(360px,78vw)}
+    .wing-backlight{filter:blur(42px);opacity:.34}
+    .wing-hang{will-change:auto}
+    body.audio-on #reactive{filter:none}   /* skip full-page hue filter on phones */
+  }
+  /* short / landscape screens: keep the entry splash compact so it always fits */
+  @media(max-height:560px){
+    #enter{gap:12px;padding:16px}
+    #enter .enter-logo{width:min(220px,48vw);margin-bottom:0}
+    #enter p{display:none}
   }
 </style>
 </head>
